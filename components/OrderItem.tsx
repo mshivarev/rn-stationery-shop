@@ -1,11 +1,13 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { OrderLine } from '../types/drug';
 import { useOrderStore } from '../stores/orderStore';
-import { useState } from 'react';
 
 export default function OrderItem({ line }: { line: OrderLine }) {
-  const [qty, setQty] = useState<number>(line.quantity);
+  const qty = line.quantity;
   const remove = useOrderStore((s) => s.remove);
+  const increment = useOrderStore((s) => s.increment);
+  const decrement = useOrderStore((s) => s.decrement);
+  const canAdd = qty < line.drug.stock;
 
   return (
     <View style={styles.row}>
@@ -19,11 +21,15 @@ export default function OrderItem({ line }: { line: OrderLine }) {
         </Text>
 
         <View style={styles.controls}>
-          <Pressable style={styles.qtyBtn} onPress={() => setQty(qty - 1)}>
+          <Pressable style={styles.qtyBtn} onPress={() => decrement(line.drug.id)}>
             <Text style={styles.qtyText}>−</Text>
           </Pressable>
           <Text style={styles.qty}>{qty}</Text>
-          <Pressable style={styles.qtyBtn} onPress={() => setQty(qty + 1)}>
+          <Pressable
+            style={[styles.qtyBtn, !canAdd && styles.disabled]}
+            disabled={!canAdd}
+            onPress={() => increment(line.drug.id)}
+          >
             <Text style={styles.qtyText}>+</Text>
           </Pressable>
           <Pressable onPress={() => remove(line.drug.id)} style={styles.remove}>
@@ -61,4 +67,5 @@ const styles = StyleSheet.create({
   qty: { fontSize: 16, fontWeight: '700', minWidth: 24, textAlign: 'center' },
   remove: { marginLeft: 'auto' },
   removeText: { color: '#e53935', fontSize: 13 },
+  disabled: { opacity: 0.35 },
 });

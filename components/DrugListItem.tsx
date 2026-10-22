@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Drug } from '../types/drug';
-import { useOrderStore } from '../stores/orderStore';
+import { selectQuantity, useOrderStore } from '../stores/orderStore';
 
 interface Props {
   drug: Drug;
@@ -9,6 +9,10 @@ interface Props {
 
 export default function DrugListItem({ drug, onPress }: Props) {
   const add = useOrderStore((s) => s.add);
+  const increment = useOrderStore((s) => s.increment);
+  const decrement = useOrderStore((s) => s.decrement);
+  const qty = useOrderStore(selectQuantity(drug.id));
+  const canAdd = qty < drug.stock;
 
   return (
     <Pressable style={styles.card} onPress={onPress}>
@@ -24,15 +28,39 @@ export default function DrugListItem({ drug, onPress }: Props) {
         {drug.prescription_required && <Text style={styles.rx}>По рецепту</Text>}
       </View>
 
-      <Pressable
-        style={styles.addBtn}
-        onPress={(e) => {
-          e.stopPropagation();
-          add(drug);
-        }}
-      >
-        <Text style={styles.addBtnText}>+</Text>
-      </Pressable>
+      {qty === 0 ? (
+        <Pressable
+          style={[styles.addBtn, !canAdd && styles.disabled]}
+          onPress={(e) => {
+            e.stopPropagation();
+            add(drug);
+          }}
+        >
+          <Text style={styles.addBtnText}>+</Text>
+        </Pressable>
+      ) : (
+        <View style={styles.controls}>
+          <Pressable
+            style={styles.qtyBtn}
+            onPress={(e) => {
+              e.stopPropagation();
+              decrement(drug.id);
+            }}
+          >
+            <Text style={styles.qtyText}>−</Text>
+          </Pressable>
+          <Text style={styles.qty}>{qty}</Text>
+          <Pressable
+            style={[styles.qtyBtn, !canAdd && styles.disabled]}
+            onPress={(e) => {
+              e.stopPropagation();
+              increment(drug.id);
+            }}
+          >
+            <Text style={styles.qtyText}>+</Text>
+          </Pressable>
+        </View>
+      )}
     </Pressable>
   );
 }
@@ -67,4 +95,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   addBtnText: { color: '#fff', fontSize: 22, lineHeight: 24, fontWeight: '700' },
+  controls: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  qtyBtn: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#eef3fa',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  qtyText: { fontSize: 18, fontWeight: '700', color: '#1e88e5' },
+  qty: { fontSize: 16, fontWeight: '700', minWidth: 24, textAlign: 'center' },
+  disabled: { opacity: 0.35 },
 });
