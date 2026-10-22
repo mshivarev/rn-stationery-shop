@@ -2,37 +2,37 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { fetchProductById } from '../api/mockProductsAPI';
-import { Product } from '../types/product';
+import { fetchDrugById } from '../api/mockDrugsAPI';
+import { Drug } from '../types/drug';
 import { RootStackParamList } from "../types/navigation";
-import ProductDetailsCard from '../components/ProductDetailsCard';
+import DrugDetailsCard from '../components/DrugDetailsCard';
 import EmptyState from '../components/EmptyState';
-import { useCartStore } from '../stores/cartStore';
+import { useOrderStore } from '../stores/orderStore';
 
-type RouteT = RouteProp<RootStackParamList, 'ProductDetails'>;
-type Nav = NativeStackNavigationProp<RootStackParamList, 'ProductDetails'>;
+type RouteT = RouteProp<RootStackParamList, 'DrugDetails'>;
+type Nav = NativeStackNavigationProp<RootStackParamList, 'DrugDetails'>;
 
-export default function ProductDetailsScreen() {
+export default function DrugDetailsScreen() {
   const { params } = useRoute<RouteT>();
   const navigation = useNavigation<Nav>();
-  const add = useCartStore((s) => s.add);
+  const add = useOrderStore((s) => s.add);
 
-  const [product, setProduct] = useState<Product | null>(null);
+  const [drug, setDrug] = useState<Drug | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let alive = true;
     (async () => {
-      const p = await fetchProductById(params.productId);
+      const d = await fetchDrugById(params.drugId);
       if (alive) {
-        setProduct(p ?? null);
+        setDrug(d ?? null);
         setLoading(false);
       }
     })();
     return () => {
       alive = false;
     };
-  }, [params.productId]);
+  }, [params.drugId]);
 
   if (loading) {
     return (
@@ -42,22 +42,22 @@ export default function ProductDetailsScreen() {
     );
   }
 
-  if (!product) {
-    return <EmptyState title="Товар не найден" />;
+  if (!drug) {
+    return <EmptyState title="Лекарство не найдено" />;
   }
 
   return (
     <View style={styles.container}>
-      <ProductDetailsCard product={product} />
+      <DrugDetailsCard drug={drug} />
       <View style={styles.footer}>
         <Pressable
           style={styles.buyBtn}
           onPress={() => {
-            add(product);
-            navigation.navigate('Cart');
+            add(drug);
+            navigation.navigate('Order');
           }}
         >
-          <Text style={styles.buyBtnText}>Добавить в корзину</Text>
+          <Text style={styles.buyBtnText}>Добавить в заказ</Text>
         </Pressable>
       </View>
     </View>

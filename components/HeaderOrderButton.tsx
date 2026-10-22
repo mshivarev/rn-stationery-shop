@@ -2,16 +2,16 @@ import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
-import { selectCartCount, useCartStore } from '../stores/cartStore';
+import { selectOrderCount, useOrderStore } from '../stores/orderStore';
 
-export default function HeaderCartButton() {
+export default function HeaderOrderButton() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const count = useCartStore(selectCartCount);
+  const count = useOrderStore(selectOrderCount);
 
   return (
-    <Pressable onPress={() => navigation.navigate('Cart')} style={styles.wrap}>
-      <Text style={styles.icon}>🛒</Text>
+    <Pressable onPress={() => navigation.navigate('Order')} style={styles.wrap}>
+      <Text style={styles.icon}>🧺</Text>
       {count > 0 && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{count}</Text>

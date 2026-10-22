@@ -2,36 +2,35 @@ import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
-import { selectCartLines, useCartLines, useCartStore } from '../stores/cartStore';
-import CartItem from '../components/CartItem';
-import CartSummary from '../components/CartSummary';
+import { useOrderLines, useOrderStore } from '../stores/orderStore';
+import OrderItem from '../components/OrderItem';
+import OrderSummary from '../components/OrderSummary';
 import EmptyState from '../components/EmptyState';
 
-type Nav = NativeStackNavigationProp<RootStackParamList, 'Cart'>;
+type Nav = NativeStackNavigationProp<RootStackParamList, 'Order'>;
 
-export default function CartScreen() {
+export default function OrderScreen() {
   const navigation = useNavigation<Nav>();
-  const lines = useCartLines();
-  const clear = useCartStore((s) => s.clear);
+  const lines = useOrderLines();
+  const clear = useOrderStore((s) => s.clear);
 
   if (lines.length === 0) {
     return (
       <EmptyState
-        title="Корзина пуста"
-        subtitle="Добавьте товары из каталога"
+        title="Заказ пуст"
+        subtitle="Добавьте лекарства из каталога"
       />
     );
   }
 
   const handleBuy = () => {
     // Читаем актуальное состояние из стора вне React — фишка Zustand
-    const total = useCartStore.getState().lines;
+    const total = useOrderStore.getState().lines;
     const count = Object.values(total).reduce((s, l) => s + l.quantity, 0);
 
     Alert.alert(
-      'Спасибо за покупку! 🎉',
-      `Вы заказали ${count} тов. на сумму ${Object.values(total)
-        .reduce((s, l) => s + l.product.price * l.quantity, 0)} ₽.`,
+      'Заказ оформлен! 💊',
+      `Вы заказали ${count} уп. лекарств.`,
       [
         {
           text: 'OK',
@@ -57,14 +56,14 @@ export default function CartScreen() {
     <View style={styles.container}>
       <FlatList
         data={lines}
-        keyExtractor={(l) => l.product.id}
-        renderItem={({ item }) => <CartItem line={item} />}
+        keyExtractor={(l) => l.drug.id}
+        renderItem={({ item }) => <OrderItem line={item} />}
         contentContainerStyle={styles.list}
       />
       <View style={styles.footer}>
-        <CartSummary />
+        <OrderSummary />
         <Pressable style={styles.buyBtn} onPress={handleBuy}>
-          <Text style={styles.buyBtnText}>Купить</Text>
+          <Text style={styles.buyBtnText}>Оформить заказ</Text>
         </Pressable>
       </View>
     </View>

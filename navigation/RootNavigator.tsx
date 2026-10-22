@@ -1,10 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
-import ProductListScreen from '../screens/ProductListScreen';
-import ProductDetailsScreen from '../screens/ProductDetailsScreen';
-import CartScreen from '../screens/CartScreen';
-import HeaderCartButton from '../components/HeaderCartButton';
+import DrugListScreen from '../screens/DrugListScreen';
+import DrugDetailsScreen from '../screens/DrugDetailsScreen';
+import OrderScreen from '../screens/OrderScreen';
+import HeaderOrderButton from '../components/HeaderOrderButton';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -13,25 +13,25 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="ProductList"
-          component={ProductListScreen}
+          name="DrugList"
+          component={DrugListScreen}
           options={{
-            title: 'Канцтовары',
-            headerRight: () => <HeaderCartButton />,
+            title: 'Аптека',
+            headerRight: () => <HeaderOrderButton />,
           }}
         />
         <Stack.Screen
-          name="ProductDetails"
-          component={ProductDetailsScreen}
+          name="DrugDetails"
+          component={DrugDetailsScreen}
           options={{
-            title: 'Товар',
-            headerRight: () => <HeaderCartButton />,
+            title: 'Лекарство',
+            headerRight: () => <HeaderOrderButton />,
           }}
         />
         <Stack.Screen
-          name="Cart"
-          component={CartScreen}
-          options={{ title: 'Корзина' }}
+          name="Order"
+          component={OrderScreen}
+          options={{ title: 'Заказ' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,32 +1,34 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { Product } from '../types/product';
-import { useCartStore } from '../stores/cartStore';
+import { Drug } from '../types/drug';
+import { useOrderStore } from '../stores/orderStore';
 
 interface Props {
-  product: Product;
+  drug: Drug;
   onPress: () => void;
 }
 
-export default function ProductListItem({ product, onPress }: Props) {
-  const add = useCartStore((s) => s.add);
+export default function DrugListItem({ drug, onPress }: Props) {
+  const add = useOrderStore((s) => s.add);
 
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      <Image source={{ uri: product.image_url }} style={styles.image} />
+      <Image source={require('../assets/no-image.png')} style={styles.image} resizeMode="contain" />
       <View style={styles.info}>
-        <Text style={styles.brand}>{product.brand}</Text>
+        <Text style={styles.category}>{drug.category}</Text>
         <Text style={styles.name} numberOfLines={2}>
-          {product.name}
+          {drug.name} {drug.dosage}
         </Text>
-        <Text style={styles.price}>{product.price} ₽</Text>
+        <Text style={styles.form}>
+          {drug.form} · {drug.manufacturer}
+        </Text>
+        {drug.prescription_required && <Text style={styles.rx}>По рецепту</Text>}
       </View>
 
-      {/* stopPropagation: чтобы тап по кнопке не открывал экран товара */}
       <Pressable
         style={styles.addBtn}
         onPress={(e) => {
           e.stopPropagation();
-          add(product);
+          add(drug);
         }}
       >
         <Text style={styles.addBtnText}>+</Text>
@@ -52,9 +54,10 @@ const styles = StyleSheet.create({
   },
   image: { width: 64, height: 64, borderRadius: 8, backgroundColor: '#f2f2f2' },
   info: { flex: 1, marginLeft: 12 },
-  brand: { fontSize: 11, color: '#888', textTransform: 'uppercase' },
-  name: { fontSize: 14, fontWeight: '600', marginVertical: 2 },
-  price: { fontSize: 15, fontWeight: '700', color: '#1e88e5' },
+  category: { fontSize: 11, color: '#888' },
+  name: { fontSize: 15, fontWeight: '600', marginVertical: 2 },
+  form: { fontSize: 13, color: '#666' },
+  rx: { fontSize: 12, color: '#e53935', fontWeight: '600', marginTop: 2 },
   addBtn: {
     width: 36,
     height: 36,

@@ -1,23 +1,21 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { CartLine } from '../types/product';
-import { useCartStore } from '../stores/cartStore';
+import { OrderLine } from '../types/drug';
+import { useOrderStore } from '../stores/orderStore';
 import { useState } from 'react';
 
-export default function CartItem({ line }: { line: CartLine }) {
+export default function OrderItem({ line }: { line: OrderLine }) {
   const [qty, setQty] = useState<number>(line.quantity);
-  const remove = useCartStore((s) => s.remove);
-
-  const sum = line.product.price * qty;
+  const remove = useOrderStore((s) => s.remove);
 
   return (
     <View style={styles.row}>
-      <Image source={{ uri: line.product.image_url }} style={styles.image} />
+      <Image source={require('../assets/no-image.png')} style={styles.image} resizeMode="contain" />
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={2}>
-          {line.product.name}
+          {line.drug.name} {line.drug.dosage}
         </Text>
-        <Text style={styles.price}>
-          {line.product.price} ₽ × {qty} = {sum} ₽
+        <Text style={styles.form}>
+          {line.drug.form} · {qty} шт.
         </Text>
 
         <View style={styles.controls}>
@@ -28,7 +26,7 @@ export default function CartItem({ line }: { line: CartLine }) {
           <Pressable style={styles.qtyBtn} onPress={() => setQty(qty + 1)}>
             <Text style={styles.qtyText}>+</Text>
           </Pressable>
-          <Pressable onPress={() => remove(line.product.id)} style={styles.remove}>
+          <Pressable onPress={() => remove(line.drug.id)} style={styles.remove}>
             <Text style={styles.removeText}>Удалить</Text>
           </Pressable>
         </View>
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
   image: { width: 72, height: 72, borderRadius: 8, backgroundColor: '#f2f2f2' },
   info: { flex: 1, marginLeft: 12 },
   name: { fontSize: 14, fontWeight: '600', marginBottom: 4 },
-  price: { fontSize: 13, color: '#1e88e5', fontWeight: '600', marginBottom: 8 },
+  form: { fontSize: 13, color: '#1e88e5', fontWeight: '600', marginBottom: 8 },
   controls: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   qtyBtn: {
     width: 30,
