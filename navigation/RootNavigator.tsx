@@ -31,7 +31,7 @@ export default function RootNavigator() {
         <Stack.Screen
           name="Order"
           component={OrderScreen}
-          options={{ title: 'Заказ' }}
+          options={{ title: 'Корзина' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

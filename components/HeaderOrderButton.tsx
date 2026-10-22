@@ -11,7 +11,7 @@ export default function HeaderOrderButton() {
 
   return (
     <Pressable onPress={() => navigation.navigate('Order')} style={styles.wrap}>
-      <Text style={styles.icon}>🧺</Text>
+      <Text style={styles.icon}>🛒</Text>
       {count > 0 && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{count}</Text>
