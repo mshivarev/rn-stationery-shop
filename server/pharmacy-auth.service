@@ -1,0 +1,22 @@
+[Unit]
+Description=Pharmacy auth API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=pharmacy-auth
+WorkingDirectory=/opt/pharmacy-auth
+EnvironmentFile=/opt/pharmacy-auth/.env
+ExecStart=/opt/pharmacy-auth/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8085 --proxy-headers
+Restart=always
+RestartSec=3
+MemoryMax=200M
+CPUQuota=30%
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/pharmacy-auth
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
