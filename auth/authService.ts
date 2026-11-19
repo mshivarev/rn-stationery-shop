@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import { loginUser } from './api';
 
 const TOKEN_KEY = 'auth_token';
 
@@ -31,14 +32,17 @@ export async function removeToken(): Promise<void> {
   await SecureStore.deleteItemAsync(TOKEN_KEY);
 }
 
-export function loginWithPassword(login: string, password: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (login.trim() === FAKE_USER.login && password === FAKE_USER.password) {
-        resolve(`fake-token-${Date.now()}`);
-      } else {
-        reject(new Error('Неверный логин или пароль'));
-      }
-    }, 500);
-  });
+export async function loginWithPassword(login: string, password: string): Promise<string> {
+  const value = login.trim();
+
+  if (!value.includes('@')) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    if (value === FAKE_USER.login && password === FAKE_USER.password) {
+      return `fake-token-${Date.now()}`;
+    }
+    throw new Error('Неверный логин или пароль');
+  }
+
+  const { token } = await loginUser(value, password);
+  return token;
 }

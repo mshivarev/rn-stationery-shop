@@ -1,0 +1,37 @@
+import { StyleSheet } from 'react-native';
+
+export const authStyles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: '#f5f7fa' },
+  container: { flexGrow: 1, justifyContent: 'center', padding: 24, gap: 12 },
+  title: { fontSize: 28, fontWeight: '800', textAlign: 'center', color: '#2e7d32' },
+  subtitle: { fontSize: 15, color: '#666', textAlign: 'center', marginBottom: 20 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
+  },
+  error: { color: '#e53935', fontSize: 14 },
+  button: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 12,
+    minHeight: 50,
+  },
+  primary: { backgroundColor: '#2e7d32', marginTop: 8 },
+  github: { backgroundColor: '#24292e' },
+  disabled: { opacity: 0.5 },
+  buttonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  link: { paddingVertical: 8, alignItems: 'center' },
+  linkText: { color: '#2e7d32', fontSize: 15, fontWeight: '600' },
+  linkDisabled: { color: '#999' },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 8 },
+  line: { flex: 1, height: 1, backgroundColor: '#ddd' },
+  dividerText: { color: '#999' },
+});

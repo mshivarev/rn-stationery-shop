@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import * as ScreenCapture from 'expo-screen-capture';
 
-const KEY = 'auth-screen';
-
 export function usePreventScreenshots() {
+  const key = useId();
+
   useEffect(() => {
     let active = true;
     let prevented = false;
@@ -11,15 +11,15 @@ export function usePreventScreenshots() {
     ScreenCapture.isAvailableAsync()
       .then(async (available) => {
         if (!available || !active) return;
-        await ScreenCapture.preventScreenCaptureAsync(KEY);
+        await ScreenCapture.preventScreenCaptureAsync(key);
         prevented = true;
-        if (!active) await ScreenCapture.allowScreenCaptureAsync(KEY);
+        if (!active) await ScreenCapture.allowScreenCaptureAsync(key);
       })
       .catch(() => {});
 
     return () => {
       active = false;
-      if (prevented) ScreenCapture.allowScreenCaptureAsync(KEY).catch(() => {});
+      if (prevented) ScreenCapture.allowScreenCaptureAsync(key).catch(() => {});
     };
-  }, []);
+  }, [key]);
 }

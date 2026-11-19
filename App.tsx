@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import RootNavigator from './navigation/RootNavigator';
 import { AuthProvider, useAuth } from './auth/AuthContext';
-import AuthScreen from './screens/AuthScreen';
+import AuthNavigator from './navigation/AuthNavigator';
 
 function Gate() {
   const { token, isLoading } = useAuth();
@@ -16,7 +16,7 @@ function Gate() {
     );
   }
 
-  return token ? <RootNavigator /> : <AuthScreen />;
+  return token ? <RootNavigator /> : <AuthNavigator />;
 }
 
 export default function App() {

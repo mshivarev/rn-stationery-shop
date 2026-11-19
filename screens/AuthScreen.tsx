@@ -5,19 +5,22 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  StyleSheet,
+  ScrollView,
   Text,
   TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, ResponseType, useAuthRequest } from 'expo-auth-session';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../auth/AuthContext';
 import { loginWithPassword } from '../auth/authService';
 import PasswordInput from '../components/PasswordInput';
+import { authStyles as styles } from '../components/authStyles';
 import { usePreventScreenshots } from '../hooks/usePreventScreenshots';
+import { AuthStackParamList } from '../types/navigation';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -28,7 +31,9 @@ const discovery = {
   tokenEndpoint: 'https://github.com/login/oauth/access_token',
 };
 
-export default function AuthScreen() {
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+
+export default function AuthScreen({ navigation }: Props) {
   usePreventScreenshots();
 
   const { signIn } = useAuth();
@@ -81,93 +86,67 @@ export default function AuthScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
-        style={styles.container}
+        style={styles.safe}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <Text style={styles.title}>Аптека</Text>
-        <Text style={styles.subtitle}>Войдите, чтобы продолжить</Text>
+        <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+          <Text style={styles.title}>Аптека</Text>
+          <Text style={styles.subtitle}>Войдите, чтобы продолжить</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Логин"
-          value={login}
-          onChangeText={setLogin}
-          autoCapitalize="none"
-          autoCorrect={false}
-          textContentType="username"
-          autoComplete="username"
-          returnKeyType="next"
-        />
-        <PasswordInput
-          placeholder="Пароль"
-          value={password}
-          onChangeText={setPassword}
-          returnKeyType="done"
-          onSubmitEditing={handleLogin}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Логин или email"
+            value={login}
+            onChangeText={setLogin}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            textContentType="username"
+            autoComplete="username"
+            returnKeyType="next"
+          />
+          <PasswordInput
+            placeholder="Пароль"
+            value={password}
+            onChangeText={setPassword}
+            returnKeyType="done"
+            onSubmitEditing={handleLogin}
+          />
 
-        {error && <Text style={styles.error}>{error}</Text>}
+          {error && <Text style={styles.error}>{error}</Text>}
 
-        <Pressable
-          style={[styles.button, styles.primary, !canSubmit && styles.disabled]}
-          onPress={handleLogin}
-          disabled={!canSubmit}
-        >
-          {submitting ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Войти</Text>
-          )}
-        </Pressable>
+          <Pressable
+            style={[styles.button, styles.primary, !canSubmit && styles.disabled]}
+            onPress={handleLogin}
+            disabled={!canSubmit}
+          >
+            {submitting ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Войти</Text>
+            )}
+          </Pressable>
 
-        <View style={styles.divider}>
-          <View style={styles.line} />
-          <Text style={styles.dividerText}>или</Text>
-          <View style={styles.line} />
-        </View>
+          <Pressable style={styles.link} onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.linkText}>Нет аккаунта? Зарегистрироваться</Text>
+          </Pressable>
 
-        <Pressable
-          style={[styles.button, styles.github, !request && styles.disabled]}
-          onPress={handleGithub}
-          disabled={!request}
-        >
-          <Ionicons name="logo-github" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Войти через GitHub</Text>
-        </Pressable>
+          <View style={styles.divider}>
+            <View style={styles.line} />
+            <Text style={styles.dividerText}>или</Text>
+            <View style={styles.line} />
+          </View>
+
+          <Pressable
+            style={[styles.button, styles.github, !request && styles.disabled]}
+            onPress={handleGithub}
+            disabled={!request}
+          >
+            <Ionicons name="logo-github" size={20} color="#fff" />
+            <Text style={styles.buttonText}>Войти через GitHub</Text>
+          </Pressable>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f5f7fa' },
-  container: { flex: 1, justifyContent: 'center', padding: 24, gap: 12 },
-  title: { fontSize: 28, fontWeight: '800', textAlign: 'center', color: '#2e7d32' },
-  subtitle: { fontSize: 15, color: '#666', textAlign: 'center', marginBottom: 20 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 16,
-  },
-  error: { color: '#e53935', fontSize: 14 },
-  button: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-    paddingVertical: 14,
-    borderRadius: 12,
-    minHeight: 50,
-  },
-  primary: { backgroundColor: '#2e7d32', marginTop: 8 },
-  github: { backgroundColor: '#24292e' },
-  disabled: { opacity: 0.5 },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  divider: { flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 8 },
-  line: { flex: 1, height: 1, backgroundColor: '#ddd' },
-  dividerText: { color: '#999' },
-});
