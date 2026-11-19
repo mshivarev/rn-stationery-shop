@@ -4,7 +4,7 @@ import { RootStackParamList } from '../types/navigation';
 import DrugListScreen from '../screens/DrugListScreen';
 import DrugDetailsScreen from '../screens/DrugDetailsScreen';
 import OrderScreen from '../screens/OrderScreen';
-import HeaderOrderButton from '../components/HeaderOrderButton';
+import HeaderActions from '../components/HeaderActions';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,7 +17,7 @@ export default function RootNavigator() {
           component={DrugListScreen}
           options={{
             title: 'Аптека',
-            headerRight: () => <HeaderOrderButton />,
+            headerRight: () => <HeaderActions />,
           }}
         />
         <Stack.Screen
@@ -25,7 +25,7 @@ export default function RootNavigator() {
           component={DrugDetailsScreen}
           options={{
             title: 'Лекарство',
-            headerRight: () => <HeaderOrderButton />,
+            headerRight: () => <HeaderActions />,
           }}
         />
         <Stack.Screen

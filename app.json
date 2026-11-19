@@ -4,6 +4,7 @@
     "slug": "pharmacy-shop",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "pharmacyshop",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
@@ -20,6 +21,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-web-browser",
+      "expo-secure-store",
+      "expo-font"
+    ]
   }
 }
