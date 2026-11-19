@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+export const PLACEHOLDER_COLOR = '#999';
+
 export const authStyles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#f5f7fa' },
   container: { flexGrow: 1, justifyContent: 'center', padding: 24, gap: 12 },
@@ -13,6 +15,7 @@ export const authStyles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
+    color: '#222',
   },
   error: { color: '#e53935', fontSize: 14 },
   button: {

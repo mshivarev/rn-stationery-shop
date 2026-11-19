@@ -11,7 +11,7 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { registerUser } from '../auth/api';
 import PasswordInput from '../components/PasswordInput';
-import { authStyles as styles } from '../components/authStyles';
+import { authStyles as styles, PLACEHOLDER_COLOR } from '../components/authStyles';
 import { usePreventScreenshots } from '../hooks/usePreventScreenshots';
 import { AuthStackParamList } from '../types/navigation';
 
@@ -72,6 +72,7 @@ export default function RegisterScreen({ navigation }: Props) {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor={PLACEHOLDER_COLOR}
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"

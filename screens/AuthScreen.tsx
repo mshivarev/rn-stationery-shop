@@ -18,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../auth/AuthContext';
 import { loginWithPassword } from '../auth/authService';
 import PasswordInput from '../components/PasswordInput';
-import { authStyles as styles } from '../components/authStyles';
+import { authStyles as styles, PLACEHOLDER_COLOR } from '../components/authStyles';
 import { usePreventScreenshots } from '../hooks/usePreventScreenshots';
 import { AuthStackParamList } from '../types/navigation';
 
@@ -96,6 +96,7 @@ export default function AuthScreen({ navigation }: Props) {
           <TextInput
             style={styles.input}
             placeholder="Логин или email"
+            placeholderTextColor={PLACEHOLDER_COLOR}
             value={login}
             onChangeText={setLogin}
             autoCapitalize="none"

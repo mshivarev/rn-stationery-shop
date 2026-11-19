@@ -14,6 +14,7 @@ export default function PasswordInput({ style, ...props }: Props) {
         autoCorrect={false}
         textContentType="password"
         autoComplete="password"
+        placeholderTextColor="#999"
         {...props}
         style={[styles.input, style]}
         secureTextEntry={!visible}
@@ -40,6 +41,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#fff',
   },
-  input: { flex: 1, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 },
+  input: { flex: 1, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16, color: '#222' },
   toggle: { paddingHorizontal: 12 },
 });

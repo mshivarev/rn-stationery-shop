@@ -12,7 +12,7 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { resendCode, verifyEmail } from '../auth/api';
 import { useAuth } from '../auth/AuthContext';
-import { authStyles as styles } from '../components/authStyles';
+import { authStyles as styles, PLACEHOLDER_COLOR } from '../components/authStyles';
 import { usePreventScreenshots } from '../hooks/usePreventScreenshots';
 import { AuthStackParamList } from '../types/navigation';
 
@@ -83,6 +83,7 @@ export default function VerifyEmailScreen({ route }: Props) {
         <TextInput
           style={[styles.input, local.code]}
           placeholder="••••••"
+          placeholderTextColor={PLACEHOLDER_COLOR}
           value={code}
           onChangeText={(text) => setCode(text.replace(/\D/g, '').slice(0, CODE_LENGTH))}
           keyboardType="number-pad"
